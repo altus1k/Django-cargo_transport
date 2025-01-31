@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Ваши заявки</h2>
+    <a href="{% url 'create_order' %}" class="btn btn-primary">Создать заявку</a>
+    <ul>
+        {% for order in orders %}
+            <li>
+                <a href="{% url 'update_order' order.id %}">{{ order.title }}</a>
+                {% if order.status == 'completed' %}
+                    <span class="badge bg-success">Выполнено</span>
+                {% elif order.status == 'in_progress' %}
+                    <span class="badge bg-info">Выполняется</span>
+                {% else %}
+                    <span class="badge bg-warning">Не начато</span>
+                {% endif %}
+                <form method="POST" action="{% url 'delete_order' order.id %}">
+                    {% csrf_token %}
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
